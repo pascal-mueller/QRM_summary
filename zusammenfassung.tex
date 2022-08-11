@@ -1,0 +1,314 @@
+% !TEX options=--shell-escape
+\title{Summary - QRM}
+\author{
+        Pascal Müller [pamuelle@student.ethz.ch]
+}
+\date{\today}
+
+\documentclass[12pt]{article}
+\usepackage{etoolbox}
+\usepackage[utf8]{inputenc}
+\usepackage[parfill]{parskip}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{physics}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{multicol}
+\usepackage{fourier}
+\usepackage{graphicx}
+\graphicspath{ {./img/} }
+% Make all the math blue - uses eetoolbox package
+\everymath{\color{blue!70}}
+\AtBeginEnvironment{equation*}{\color{blue!70}}
+\AtBeginEnvironment{equation}{\color{blue!70}}
+
+\definecolor{bkg_light}{HTML}{d0ddf2}
+\definecolor{bkg_dark}{HTML}{717ebf}
+
+\newcommand{\mysection}[1]{
+    \setlength\fboxsep{4pt} %% spacing around box contents
+    \section*{\colorbox{bkg_dark}{\makebox[0.47\textwidth]{\color{white}#1}}}
+}
+
+\newcommand{\mysubsection}[1]{
+    \setlength\fboxsep{4pt} %% spacing around box contents
+    \subsection*{\colorbox{bkg_light}{\makebox[0.47\textwidth]{\color{black}#1}}}
+}
+
+%\usepackage[outputdir=/home/pascal/.config/sublime-text-3/Cache]{minted}
+
+\begin{document}
+\maketitle
+
+Serien zusammengefasst: 1 \\
+Slides zusammengefasst: 1 
+
+\textbf{Notes:} \\
+Slide 1: Vieles ausgelassen, falls Platz, gehe nochmal über
+Slide 1. \\
+Slide 2: Lots of random math I didnt include yet. Waiting on the rest of the
+course.
+
+
+TODO:
+\begin{itemize}
+  \item Add different types of risk (Slide 1)
+  \item Add Basel accords?
+  \item Add Solvency I and II?
+  \item Add Standard formula and internal model approach?
+  \item ADD series 2 aufgabe 1.a auf zsmfg resp. gauss integral - siehe
+        stackoverflow and integral solver.
+  \item !Lesbesque integral trick thingie. See slide 2, S2A2f
+  \item Check S3 notes on what to add to the summary.
+  \item Student-t See S3A4
+  \item Add normal dist integral (substitution)
+  \item VaR and ES von allen distributions.
+\end{itemize}
+
+\begin{multicols*}{2}
+
+\mysection{Definitions \& Concepts}
+\mysubsection{Main Goal of Regulation}
+Ensure that financial institutions have enough capital to remain solvent.
+
+\mysubsection{Three Pillars of Financial Regulation}
+The three pillar concept is at the basis of the Basel II and Solvency II
+regulatory frameworks.
+
+\paragraph{Pillar 1: Minimal Capital Charge} Requirement for the calculation of
+the regulatory capital to ensure that a bank holds sufficient capital for its
+\textcolor{green}{credit risk} in the \textit{banking book},
+\textcolor{green}{market risk} in the \textit{trading book} and
+\textcolor{green}{operational risk}.
+
+\paragraph{Pillar 2: Supervisory Review Process} Local regulators review the
+checks and balances put in place for capital adequacy assessments, ensure that
+
+\mysubsection{Model Uncertainity}
+Model uncertainty refers to the uncertainty about the accuracy of a model. It
+results from imprecise and idealized assumptions, which, to some degree, have
+to be made in every modeling framework.
+
+\mysubsection{Knightian Uncertainity}
+In economics, Knightian uncertainty is a lack of any quantifiable knowledge 
+about some possible occurrence, as opposed to the presence of quantifiable
+risk. The concept acknowledges some fundamental degree of ignorance, a limit 
+to knowledge, and an essential unpredictability of future events.
+
+\mysubsection{Ambiguity Aversion}
+In decision theory and economics, ambiguity aversion is a preference for known 
+risks over unknown risks. An ambiguity-averse individual would rather choose 
+an alternative where the probability distribution of the outcomes is known 
+over one where the probabilities are unknown.
+
+TODO: Pic
+
+\mysubsection{Empirical Distribution Function}
+Let $x_1, \dots, x_n$ be independent realizations of a random variable $X$. The
+corresponding \textit{empirical distribution function} 
+$\hat{F}_X : \mathbb{R} \to [0, 1]$ is given by the step function
+\[
+  \hat{F}_X(x) = \frac{1}{n} \sum_{i=1}^n 1_{\{x_i \leq x\}} \qquad x\in
+  \mathbb{R}
+\]
+whereas $1_{\{\cdot\}}$ is the indicator function.
+
+\paragraph{An application: Generating Loss Distr.}
+We can approximate the dist. of $L_{t+1}$ by the edf above:
+\[
+  \hat{F}_X(x) = \frac{1}{n} \sum_{i=1}^n 1_{\{\textcolor{red}{l_{l-i+1}}
+  \leq x\}}
+\]
+where $l_{t-n+1}, \dots, l_t$ are the last $n$ realized losses. Each of those
+losses has equal probability (hence the $1/n$ and the indicator function).
+
+\paragraph{Advantage} Easy to implement, no modeling assumptions, no eastimation
+required (you just look at past losses).
+
+\paragraph{Drawbacks} Sufficient data for all risk-factors required, makes
+predictions based on past data.
+
+% Cummulative Distribution Function
+\mysubsection{Cummulative Distribution Function}
+Let $X$ be a random variable. The CDF $F_X : \mathbb{R} \to [0, 1]$ given by
+$\mathbf{F_X(x) = \mathbb{P}[X \leq x]}$ satisfies
+\begin{alignat*}{2}
+  &\text{Normalization} &&\lim_{x \to -\infty} F_X(x) = 0 \text{ and }
+    \lim_{x \to \infty}F_X(x) = 1 \\
+  &\text{Right-Continuity} \quad &&F_X(x_n) \downarrow F_X(x) \text{ for } x_n
+  \downarrow x \in \mathbb{R} \\
+  &\text{Monotonicity} &&F_X(a) \leq F_L(b) \text{ for } a \leq b
+\end{alignat*}
+
+\mysubsection{Expectation Value}
+$\mathbb{E}[X] = \sum_{i=1}^\infty x_i p_i$
+
+$\mathbb{E}[X] = \int_{-\infty}^\infty x f(x) dx$
+
+\warning $\mathbb{E}$ is linear: $\mathbb{E}[\sum_{i=1}^N a_i X_i]
+= \sum_{i=1}^N a_i \mathbb{E}[X_i]$
+
+\mysubsection{Variance}
+$Var(X) = \mathbb{E}[(X - \mathbb{E}[X])^2]
+        = \mathbb{E}[X^2] - \mathbb{E}[X]^2$
+
+\mysubsection{Value-at-Risk $\text{VaR}_\alpha(X)$}
+\warning Basically a quantile.
+\[
+  \text{VaR}_\alpha(X) = \min\{m\in\mathbb{R} : \mathbb{P}[X - m \leq 0]
+  \geq \alpha\}
+\]
+\paragraph{Korollar:} Let $L$ be rnd. var taking values in interval $I \subset
+\mathbb{R}$. Then
+\[
+  \text{VaR}_\alpha(f(L)) = f(\text{VaR}_\alpha(L))
+\]
+for each $\alpha \in (0, 1)$ and every strictly increasing continous function
+$f: I \to \mathbb{R}$.
+
+TODO: Intuition, Pic
+
+
+\mysubsection{Conditional Expectation}
+\[
+  \mathbb{E}[X|X \textcolor{red}{\geq} \mu] = \frac{1}{\textcolor{red}
+  {\mathbb{P}}[X \geq \mu]} \int_\mu^\infty xf(x)dx
+\]
+with $\mathbb{P}[X\geq\mu] = \int_\mu^\infty f(x)dx$
+\warning See Korollar below.
+\mysubsection{Expected Shortfall $\text{ES}_\alpha(X)$}
+\[
+  \text{ES}_\alpha(X) = \mathbb{E}[X | X \geq \text{VaR}_\alpha(X)]
+\]
+\paragraph{Korollar:} Let $L$ be a rnd var. and $a\in \mathbb{R}$ s.t.
+$\mathbb{P}[L \geq 0]$. Then:
+$\mathbb{E}[L | L \geq a] = a + \frac{1}{\mathbb{P}[L \geq a]}
+\int_a^\infty \mathbb{P}[L \geq x] dx$
+
+\warning $\mathbb{P}[L \geq a]$ is the tail, probably equal $1-\alpha$.
+TODO: Is the warning always true? Always $1-\alpha$?
+
+TODO: Intuition, Pic
+
+
+
+
+
+\newpage
+%
+% PROBABILITY
+%
+\mysection{Probability}
+\mysubsection{Basics}
+$F_X(x) = \mathbb{P}[X \leq x] = \int_{-\infty}^x f(x') dx'$
+
+\mysubsection{Bayes Theorem}
+$P(A | B) = \frac{P(B | A)P(A)}{P(B)}$
+\mysubsection{Law of Total Probability}
+$P(A) = \sum_n P(A | B_n) P(B_n)$ where $B_n$ discrete and finite.
+\paragraph{Example:} $Y \sim Bernoulli$ and $Z \sim Exp(\lambda)$. \\
+$\mathbb{P}[YZ \leq x] = \mathbb{P}[YZ \leq x | Y = 1]\mathbb{P}[Y=1]
++ \mathbb{P}[YZ \leq x | Y = 0]\mathbb{P}[Y = 0]$
+
+%
+% DISTRIBUTIONS
+%
+\mysection{Distributions}
+% Normal distribution
+\mysubsection{Normal}
+\warning Can NOT use Gaussian Integral for Gaussian Functions!
+\warning Use a sub for computations!
+
+TODO: See S2A1. Note: See the question I asked in the mathematics Discord.
+
+\mysubsection{Bernoulli}
+\warning Takes value $1$ with prob. $p$ and $0$ with prob. $q = 1 - p$.
+\warning Binomial Dist. with $n=1$.
+
+\[
+  f(k;p) = \begin{cases}
+    p & k = 1 \\
+    q = 1-p & k = 0
+  \end{cases}
+\]
+$f(k;p) = p^k(1-p)^{1-k} = pk + (1-p)(1-k)$ for $k \in (0, 1)$ 
+
+$\mathbb{E}[X] = Pr(X = 1) \cdot 1 + Pr(X = 0)\cdot 0 = p$ \\
+$\mathbb{E}[X^2] = p = \mathbb{E}[X]$ \\
+$Var[X] = pq = p(1-p)$
+
+
+% Poisson
+\mysubsection{Poisson: Pois($\lambda$)}
+\warning When computing $\mathbb{E}[N^2]$ use factorial trick.
+
+\[
+  \mathbb{P}[N = n] = e^{-\lambda}\frac{\lambda^n}{n!}
+  \quad n = \textcolor{red}{0}, 1, 2, \dots
+\]
+
+$\mathbb{E}[N] = \lambda$ (Use Series for exp.)
+
+$\mathbb{E}[N^{\textcolor{red}{2}}] = \lambda^2 + \mathbb{E}[N] = \lambda^2 +
+  \lambda$
+
+$Var[N] = \lambda = \mathbb{E}[N]$
+
+% Exponential
+\mysubsection{Exponential: $\text{Exp}(\lambda)$}
+
+PDF: $f(x) = \begin{cases}
+                \lambda e^{-\lambda x} & x \geq 0 \\ 0 & x < 0 
+             \end{cases}
+             \qquad \lambda > 0
+             $
+
+$\mathbb{E}[X] = \frac{1}{\lambda}$
+
+$\mathbb{E}[X^2] = \frac{2}{\lambda^2}$
+
+$Var[X] = \frac{1}{\lambda^2}$
+
+\paragraph{Example: Compute dist. of $exp(X)$} Denote $Y = \exp(X)$ and $F_Y(y) =
+\mathbb{P}[Y \leq y]$. Since $x \geq 0 \ \Leftrightarrow \ y = \exp(x) \geq 1$,
+one has $F_Y(y) = 0$ for $y < 1$, whereas
+\begin{align*}
+  F_Y(y) &= \mathbb{P}[\exp(X) \leq y] = \mathbb{P}[X \leq \log{y}] \\
+  &= \int_0^{\log{y}} \lambda e^{-\lambda x}dx = 1 - y^{-\lambda}
+\end{align*}
+for $y \geq 1$. Computing $f(x) = \frac{d}{dy} F_Y(y)$ we get the density
+\[
+  f(y) = \begin{cases}
+           \lambda y^{-y - 1} = \frac{\lambda}{y^{y+1}} & y \geq 1 \\
+           0 & y < 1
+         \end{cases}
+\]
+Hence, $Y$ has a Pareto distribution with scale parameter 1 and shape parameter
+$\lambda$.
+
+\mysubsection{Pareto}
+TODO: See S1A4.c
+
+\newpage
+
+\mysection{Mathematical Tools}
+\mysubsection{Partial Integration}
+\[
+  \int_a^b u v' dx = [u v]^b_a - \int_a^b u' v dx
+\]
+
+\mysubsection{Tricks}
+\paragraph{Factorial Trick}
+\[
+  \frac{n^2}{n!} = \frac{n(n-1) + n}{n!} = \frac{1}{(n-2)!} + \frac{1}{(n-1)!}
+\]
+
+\mysubsection{Series}
+
+\[
+  e^\lambda = \sum_{n = \textcolor{red}{0}}^\infty \frac{\lambda^n}{n!}
+\]
+
+\end{multicols*}
+
+\end{document}
